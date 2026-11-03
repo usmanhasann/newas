@@ -1,0 +1,52 @@
+{
+  "cli": {
+    "version": ">= 12.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "env": { "APP_VARIANT": "development" }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "autoIncrement": true,
+      "android": { "buildType": "apk" },
+      "env": {
+        "APP_VARIANT": "development",
+        "EAS_PROJECT_ID": "85ad1c73-e68a-42e6-8a7b-d2ca29c4949d",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://eavljsrtsyfhusqahxgk.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdmxqc3J0c3lmaHVzcWFoeGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NDMwNjEsImV4cCI6MjA5NzMxOTA2MX0.NJoEicfSpSpy2BZp_i41GyZnMcnzjBdHY6CcAtmkMIU"
+      }
+    },
+    "staging": {
+      "distribution": "internal",
+      "channel": "staging",
+      "env": { "APP_VARIANT": "staging" }
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "env": {
+        "APP_VARIANT": "production",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://eavljsrtsyfhusqahxgk.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhdmxqc3J0c3lmaHVzcWFoeGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NDMwNjEsImV4cCI6MjA5NzMxOTA2MX0.NJoEicfSpSpy2BZp_i41GyZnMcnzjBdHY6CcAtmkMIU"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "hkstechlabs@gmail.com",
+        "ascAppId": "6808659001",
+        "appleTeamId": "G5FPHWH4B4",
+        "companyName": "A&K AI Development LLC"
+      }
+    }
+  }
+}

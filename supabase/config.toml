@@ -1,0 +1,96 @@
+# Supabase local/dev configuration. `supabase start` uses this; `supabase db push`
+# applies supabase/migrations to the linked project. Production secrets are NOT here.
+project_id = "inner-circle"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[db.pooler]
+# Build prompt §5.1: Edge Functions use the transaction-mode pooler (Supavisor).
+enabled = true
+port = 54329
+pool_mode = "transaction"
+
+[studio]
+enabled = true
+port = 54323
+
+[storage]
+enabled = true
+# Avatars + future entry attachments; treat as sensitive (build prompt §6).
+file_size_limit = "10MiB"
+
+[auth]
+enabled = true
+# Deep-link scheme(s) so the password-reset email returns into the app (§9.2).
+site_url = "innercircle://"
+additional_redirect_urls = [
+  "innercircle://reset-password",
+  "innercircle-dev://reset-password",
+  "innercircle-staging://reset-password",
+  "exp://127.0.0.1:8081/--/reset-password",
+]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false   # email confirmation can be enabled per-env; off for dev
+
+[edge_runtime]
+enabled = true
+# Privileged server logic only (LLM via OpenRouter, push, email, fan-out, store receipt
+# validation).
+policy = "oneshot"
+
+# Sign-in & Security (N5): the 6-digit code is typed in the app by a signed-in user (the old
+# emailed link is gone), so a valid JWT is required. password-reset also runs signed out: the app
+# then sends the anon key, which is a valid JWT too.
+[functions.confirm-email-verification]
+verify_jwt = true
+
+[functions.request-email-verification]
+verify_jwt = true
+
+[functions.change-email]
+verify_jwt = true
+
+[functions.update-password]
+verify_jwt = true
+
+[functions.password-reset]
+verify_jwt = true
+
+# Account linking pre-check (N4): called signed out / on the anonymous onboarding session with the
+# anon key, before any Google / Apple token reaches the auth server.
+[functions.account-link]
+verify_jwt = true
+
+# Account deletion must be authenticated — it only ever deletes the caller's own account.
+[functions.delete-account]
+verify_jwt = true
+
+# Scheduled 8pm streak reminder — called by pg_cron (no user session); authorized by x-cron-secret.
+[functions.streak-reminder]
+verify_jwt = false
+
+# Scheduled 9 AM "your recap is ready" push — called by pg_cron; authorized by x-cron-secret.
+[functions.recap-notifications]
+verify_jwt = false
+
+# Owner join notifications (N10), gathered joins sent every minute by pg_cron; authorized by
+# x-cron-secret (migration 20261022042000).
+[functions.circle-join-digest]
+verify_jwt = false
